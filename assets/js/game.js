@@ -1,13 +1,45 @@
-function fight() {
-	window.alert('The fight has begun');
-}
+var chickenName = window.prompt('Please state your chicken\'s given name:');
+var chickenHealth = 1000;
+var chickenAttack = 100;
 
-var playerName = window.prompt('What is your robot\'s name?');
+console.log(chickenName, chickenHealth, chickenHealth);
 
-console.log(playerName);
+var enemyName = 'Fog Horn Leg Horn';
+var enemyHealth = '50';
+var enemyAttack = '12';
 
-// fight();
+var fight = function() {
+	window.alert('Welcome to Chicken Fight Club');
 
-console.log('This logs a string, good for leaving yourself a note');
-console.log(10+10)
-console.log('The robots name is '+ playerName);
+	//subtract enemy health 
+	enemyHealth = enemyHealth - chickenAttack;
+
+	//log result
+	console.log(chickenName+' attacked '+ enemyName+'. '+enemyName+' now has '+ enemyHealth+' health remaining');
+	//subtract player health
+	chickenHealth = chickenHealth - enemyAttack;
+	//log result
+	console.log(enemyName+' has attacked '+chickenName+'. '+chickenName+' now has '+chickenHealth+' health remaining');
+
+	//enemy health check
+	if (enemyHealth<=0) {
+		window.alert(enemyName+' has flown to the big coop in the sky');
+	}
+	else {
+		window.alert(enemyName+' has '+enemyHealth+' health remaining');
+	}
+
+	//player health check
+	if(chickenHealth <=0) {
+		window.alert(chickenName+' has flown to the big coop in the sky');
+	}
+	else {
+		window.alert(chickenName+' has '+chickenHealth+' health remaining')
+	}
+
+
+
+
+};
+
+fight();
