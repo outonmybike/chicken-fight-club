@@ -1,15 +1,14 @@
 var chickenName = window.prompt('Please state your chicken\'s given name:');
+// var chickenName = 'Fred'
 var chickenHealth = 1000;
 var chickenAttack = 100;
 var chickenMoney = 10;
 
-console.log(chickenName, chickenHealth, chickenHealth);
-
-var enemyName = 'Fog Horn Leg Horn';
+var enemyNameList = ['Fog Horn Leg Horn','Chicken Little','Colonel Sanders']
 var enemyHealth = '50';
 var enemyAttack = '12';
 
-var fight = function() {
+var fight = function(enemyName) {
 	window.alert('Welcome to Chicken Fight Club');
 
 	var promptFight = window.prompt('Would you like to FIGHT or SKIP this round?');
@@ -57,4 +56,11 @@ var fight = function() {
 
 };
 
-fight();
+for(var i = 0; i < enemyNameList.length; i++) {
+	fight(enemyNameList[i]);
+}
+
+
+
+
+// fight();
