@@ -70,7 +70,7 @@ var enemyInfo = [
 
 
 var fightOrSkip = function() {
-	var promptFight = window.prompt('Would you like to FIGHT or SKIP this battle?');
+	var promptFight = window.prompt('Would you like to FIGHT or SKIP this round?');
 
 	if(!promptFight) {
 		window.alert('Please enter a valid response');
@@ -92,44 +92,50 @@ var fightOrSkip = function() {
 
 var fight = function(enemy,round) {
 	var exchange = 0
+	var isPlayerTurn = true;
+	if(Math.random()>=.5) {
+		isPlayerTurn = false;
+	}
 	while(enemy.health>0 && playerInfo.health > 0) {
 
-		if(fightOrSkip()) {
-			break;
-		}
+		if(isPlayerTurn) {
+			if(fightOrSkip()) {
+				break;
+			}
+			//player attack
+			var damage = randomNumber(playerInfo.attack - 3,playerInfo.attack);
+			enemy.health = Math.max(0, enemy.health - damage);
+			console.log('You delivered '+damage+' damage')
+			//log result
+			console.log(playerInfo.name+' attacked '+ enemy.name+'. '+enemy.name+' now has '+ enemy.health+' health remaining');
 
-		//player attack action 
-		var damage = randomNumber(playerInfo.attack - 3,playerInfo.attack);
-		enemy.health = Math.max(0, enemy.health - damage);
-		console.log('You delivered '+damage+' damage')
-		//log result
-		console.log(playerInfo.name+' attacked '+ enemy.name+'. '+enemy.name+' now has '+ enemy.health+' health remaining');
-
-		//enemy health check
-		if (enemy.health<=0) {
-			window.alert(enemy.name+' has flown to the big coop in the sky');
-			//spoils
-			playerInfo.money = playerInfo.money + 20;
-			break;
+			//enemy health check
+			if (enemy.health<=0) {
+				window.alert(enemy.name+' has flown to the big coop in the sky');
+				//spoils
+				playerInfo.money = playerInfo.money + 20;
+				break;
+			} else {
+				window.alert('Your opponent '+enemy.name+' has '+enemy.health+' health remaining');
+			}
+			//enemy attack
 		} else {
-			window.alert('Your opponent '+enemy.name+' has '+enemy.health+' health remaining');
-		}
-
-		//opponent attack action
-		console.log(playerInfo.health);
-		damage = randomNumber(enemy.attack - 3,enemy.attack);
-		console.log(damage)
-		playerInfo.health = Math.max(0, playerInfo.health - damage);
-		console.log('You took '+damage+' damage')
-		console.log(enemy.name+' has attacked '+playerInfo.name+'. '+playerInfo.name+' now has '+playerInfo.health+' health remaining');
-
-		//player health check
-		if(playerInfo.health <=0) {
-			window.alert('Your chicken '+playerInfo.name+' has flown to the big coop in the sky');
-			break;
-		} else {
+			console.log(playerInfo.health);
+			var damage = randomNumber(enemy.attack - 3,enemy.attack);
+			console.log(damage)
+			playerInfo.health = Math.max(0, playerInfo.health - damage);
+			console.log('You took '+damage+' damage')
+			console.log(enemy.name+' has attacked '+playerInfo.name+'. '+playerInfo.name+' now has '+playerInfo.health+' health remaining');
+			//player health check
+			if(playerInfo.health <=0) {
+				window.alert('Your chicken '+playerInfo.name+' has flown to the big coop in the sky');
+				break;
+			} else {
 			window.alert(playerInfo.name+' has '+playerInfo.health+' health remaining')
-		}	
+			}	
+		}
+		//switch order for next round
+		isPlayerTurn = !isPlayerTurn;
 	}
 };
 
