@@ -57,9 +57,15 @@ var fight = function(enemyName) {
 };
 
 for(var i = 0; i < enemyNameList.length; i++) {
-	var pickedEnemyName = enemyNameList[i];
-	enemyHealth = 50;
-	fight(pickedEnemyName);
+	if (chickenHealth>0) {
+		window.alert('Welcome to Chicken Fight Club. Round: '+(i+1));
+		var pickedEnemyName = enemyNameList[i];
+		enemyHealth = 50;
+		debugger;
+		fight(pickedEnemyName);
+	} else {
+		window.alert('Health has reached zero. Your chicken has flown the coop. Game over')
+	}
 }
 
 
