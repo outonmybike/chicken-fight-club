@@ -1,7 +1,7 @@
 window.alert('Welcome to Chicken Fight Club');	
 var chickenName = window.prompt('Please state your chicken\'s given name:');
 // var chickenName = 'Fred'
-var chickenHealth = 1000;
+var chickenHealth = 100;
 var chickenAttack = 10;
 var chickenMoney = 10;
 
@@ -9,17 +9,18 @@ var enemyNameList = ['Fog Horn Leg Horn','Chicken Little','Colonel Sanders']
 var enemyHealth = '50';
 var enemyAttack = '12';
 
-var fight = function(enemyName) {
+var fight = function(enemyName,round) {
 	while(enemyHealth>0 && chickenHealth > 0) {
 
-		var promptFight = window.prompt('Would you like to FIGHT or SKIP this round?');
+		var promptFight = window.prompt('Type "Skip" if you want to skip this round?');
 
+		if(promptFight===null) {promptFight='a';}		
 		if (promptFight.toLowerCase() === 'skip') {
 			//confirm skip
-			var confirmSkip = window.confirm('You sure you want to quit?');
+			var confirmSkip = window.confirm('You sure you want to quit this round?');
 			//if confirmed to leave
 			if(confirmSkip) {
-				window.alert(chickenName+' has chosen to skip the fight. (You literally just "Chickened Out")');
+				window.alert(chickenName+' has "Chickened Out" of round '+round);
 				chickenMoney = chickenMoney - 10;
 				console.log('Chicken Coins: '+chickenMoney);
 				break;
@@ -38,7 +39,7 @@ var fight = function(enemyName) {
 			chickenMoney = chickenMoney + 20;
 			break;
 		} else {
-			window.alert(enemyName+' has '+enemyHealth+' health remaining');
+			window.alert('Your opponent '+enemyName+' has '+enemyHealth+' health remaining');
 		}
 
 		//opponent attack action
@@ -56,19 +57,52 @@ var fight = function(enemyName) {
 	}
 };
 
-for(var i = 0; i < enemyNameList.length; i++) {
-	if (chickenHealth>0) {
-		window.alert('Welcome to Chicken Fight Club. Round: '+(i+1));
-		var pickedEnemyName = enemyNameList[i];
-		enemyHealth = 50;
-		debugger;
-		fight(pickedEnemyName);
-	} else {
-		window.alert('Health has reached zero. Your chicken has flown the coop. Game over')
+var startGame = function () {
+	chickenHealth = 100;
+	chickenAttack = 10;
+	chickenMoney = 10;
+	for(var i = 0; i < enemyNameList.length; i++) {
+		var round = i+1
+		if (chickenHealth>0) {
+			window.alert('Get ready to fight. Round '+round);
+			var pickedEnemyName = enemyNameList[i];
+			enemyHealth = 50;
+			// debugger;
+			fight(pickedEnemyName,round);
+		} 
+		else {
+			window.alert('Health has reached zero. Your chicken has flown the coop. Game over');
+			break;
+		}
 	}
+	endGame();
+};
+
+var endGame = function() {
+	window.alert('The game is over. Let\'s see how you did.');
+	if(chickenHealth>0) {
+		window.alert('Great job. You survived the chicken fights. You have a score of '+chickenMoney);
+	}
+	else {
+		window.alert('Sorry. But your chicken did not make it out alive')
+	}
+	var playAgainConfirm = window.confirm('Would you like to play agian?');
+	if(playAgainConfirm) {
+		startGame();		
+	}
+	else {
+		window.alert('Thank you for playing Chicken Fight Club. Enjoy some chicken fingers');
+	}
+
 }
 
+startGame();
 
 
 
-// fight();
+
+
+
+
+
+
