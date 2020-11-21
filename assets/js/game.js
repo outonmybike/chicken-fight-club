@@ -5,6 +5,8 @@ var healthAdded = 20;
 var attackCost = 7;
 var attackAdded = 6;
 var skipFee = 2;
+var attackInit = 100;
+var moneyInit = 100;
 
 var randomNumber = function(min,max) {
 	var value = Math.floor(Math.random()*(max-min+1)+min);
@@ -24,12 +26,12 @@ var getPlayerName = function() {
 var playerInfo = {
 	name: getPlayerName(),
 	health: 100,
-	attack: 10,
-	money: 10,
+	attack: attackInit,
+	money: moneyInit,
 	reset: function() {
 		this.health = 100;
-		this.money = 10;
-		this.attack = 10;
+		this.money = moneyInit;
+		this.attack = attackInit;
 	},
 	refillHealth: function() {
 		if(this.money >= healthCost) {	
@@ -70,14 +72,15 @@ var enemyInfo = [
 
 
 var fightOrSkip = function() {
-	var promptFight = window.prompt('Would you like to FIGHT or SKIP this round?');
+	var promptFight = window.prompt('Press 1 if you would like to pay $'+skipFee+' to skip this round');
 
-	if(!promptFight) {
-		window.alert('Please enter a valid response');
-		return fightOrSkip();
-	}
+	// if(!promptFight) {
+	// 	window.alert('Please enter a valid response');
+	// 	return fightOrSkip();
+	// }
 
-	if (promptFight.toLowerCase() ==='skip') {
+	// if (promptFight.toLowerCase() ==='skip') {
+	if (promptFight ==='1') {
 		var confirmSkip = window.confirm('Are you sure you\'d like to skip this round?');
 		if(confirmSkip) {
 			window.alert(playerInfo.name+' has "Chickened Out" of this round');
@@ -111,7 +114,7 @@ var fight = function(enemy,round) {
 
 			//enemy health check
 			if (enemy.health<=0) {
-				window.alert(enemy.name+' has flown to the big coop in the sky');
+				window.alert('You won. ' +enemy.name+' has flown to the big coop in the sky');
 				//spoils
 				playerInfo.money = playerInfo.money + 20;
 				break;
@@ -167,11 +170,18 @@ var startGame = function () {
 
 var endGame = function() {
 	window.alert('The game is over. Let\'s see how you did.');
-	if(playerInfo.health>0) {
-		window.alert('Great job. You survived the chicken fights. You have a score of '+playerInfo.money);
+
+	var highScore = localStorage.getItem('highscore');
+	highScore = highScore || 0;
+
+	if (playerInfo.money>highScore) {
+		localStorage.setItem('highScore',playerInfo.money);
+		localStorage.setItem('name',playerInfo.name);
+
+		alert(playerInfo.name+' now has the high score of '+playerInfo.money);
 	}
 	else {
-		window.alert('Sorry. But your chicken did not make it out alive')
+		alert(playerInfo.name+' did not beat the high score of '+highScore+'. Sharpen that beak and try again.');
 	}
 	var playAgainConfirm = window.confirm('Would you like to play agian?');
 	if(playAgainConfirm) {
@@ -180,7 +190,6 @@ var endGame = function() {
 	else {
 		window.alert('Thank you for playing Chicken Fight Club. Enjoy some chicken fingers');
 	}
-
 };
 
 var shop = function() {
