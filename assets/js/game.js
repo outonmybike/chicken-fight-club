@@ -11,8 +11,18 @@ var randomNumber = function(min,max) {
 	return value;
 };
 
+var getPlayerName = function() {
+	var name = '';
+	while (name===''||name==null) {
+		name= prompt('Please state your chicken\'s given name:')
+	}
+
+	console.log('Your chicken\'s name is '+name);
+	return name;
+}
+
 var playerInfo = {
-	name: window.prompt('Please state your chicken\'s given name:'),
+	name: getPlayerName(),
 	health: 100,
 	attack: 10,
 	money: 10,
