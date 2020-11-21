@@ -8,11 +8,14 @@ var chickenMoney = 10;
 var enemyNameList = ['Fog Horn Leg Horn','Chicken Little','Colonel Sanders']
 var enemyHealth = '50';
 var enemyAttack = '12';
+var skipFee = 11;
 
 var fight = function(enemyName,round) {
+	var exchange = 0
 	while(enemyHealth>0 && chickenHealth > 0) {
-
-		var promptFight = window.prompt('Type "Skip" if you want to skip this round?');
+		exchange += 1
+		if(exchange>1) {exc=' the rest of'} else {exc=''}
+		var promptFight = window.prompt('Type "Skip" if you want to pay $'+skipFee+' to skip'+exc+' this round');
 
 		if(promptFight===null) {promptFight='a';}		
 		if (promptFight.toLowerCase() === 'skip') {
@@ -21,20 +24,20 @@ var fight = function(enemyName,round) {
 			//if confirmed to leave
 			if(confirmSkip) {
 				window.alert(chickenName+' has "Chickened Out" of round '+round);
-				chickenMoney = chickenMoney - 10;
+				chickenMoney = Math.max(0, chickenMoney - skipFee);
 				console.log('Chicken Coins: '+chickenMoney);
 				break;
 			}
 		}
 		//player attack action 
-		enemyHealth = enemyHealth - chickenAttack;
+		enemyHealth = Math.max(0, enemyHealth - chickenAttack);
 		//log result
 		console.log(chickenName+' attacked '+ enemyName+'. '+enemyName+' now has '+ enemyHealth+' health remaining');
 
 		//enemy health check
 		if (enemyHealth<=0) {
 			window.alert(enemyName+' has flown to the big coop in the sky');
-			//prize money
+			//spoils
 			chickenMoney = chickenMoney + 20;
 			break;
 		} else {
@@ -42,8 +45,7 @@ var fight = function(enemyName,round) {
 		}
 
 		//opponent attack action
-		chickenHealth = chickenHealth - enemyAttack;
-		//log result
+		chickenHealth = Math.max(0, chickenHealth - enemyAttack);
 		console.log(enemyName+' has attacked '+chickenName+'. '+chickenName+' now has '+chickenHealth+' health remaining');
 
 		//player health check
@@ -65,7 +67,7 @@ var startGame = function () {
 		if (chickenHealth>0) {
 			window.alert('Get ready to fight. Round '+round);
 			var pickedEnemyName = enemyNameList[i];
-			enemyHealth = 50;
+			enemyHealth = randomNumber(40,60);
 			// debugger;
 			fight(pickedEnemyName,round);
 			if (chickenHealth > 0 && i < enemyNameList.length -1) {
@@ -134,6 +136,11 @@ var shop = function() {
 			shop();
 			break;
 	}
+};
+
+var randomNumber = function(min,max) {
+	var value = Math.floor(Math.random()*(max-min+1)+min);
+	return value;
 };
 
 startGame();
