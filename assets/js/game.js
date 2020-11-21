@@ -178,17 +178,17 @@ var endGame = function() {
 };
 
 var shop = function() {
-	var shopOptionPrompt = window.prompt('Would you like to REFILL health ($7), UPGRADE attack ($7), or LEAVE? Your balance: $'+playerInfo.money);
+	var shopOptionPrompt = window.prompt('Would you like to refill health (Press 1), upgrade attack (Press  2), or leave (Press 3)? Your balance: $'+playerInfo.money);
 	if (shopOptionPrompt===null) {shopOptionPrompt='a';}
 	response=shopOptionPrompt.toLowerCase();
 	switch(response) {
-		case 'refill':
+		case '1':
 			playerInfo.refillHealth();
 			break;
-		case 'upgrade':
+		case '2':
 			playerInfo.upgradeAttack();
 			break;
-		case 'leave':
+		case '3':
 			window.alert('Leaving the store.');
 			break;
 		default:
