@@ -69,26 +69,35 @@ var enemyInfo = [
 ];
 
 
+var fightOrSkip = function() {
+	var promptFight = window.prompt('Would you like to FIGHT or SKIP this battle?');
+
+	if(!promptFight) {
+		window.alert('Please enter a valid response');
+		return fightOrSkip();
+	}
+
+	if (promptFight.toLowerCase() ==='skip') {
+		var confirmSkip = window.confirm('Are you sure you\'d like to skip this round?');
+		if(confirmSkip) {
+			window.alert(playerInfo.name+' has "Chickened Out" of this round');
+			playerInfo.money -= skipFee;
+			return true;
+		}
+	}
+	return false;
+}
+
+
 
 var fight = function(enemy,round) {
 	var exchange = 0
 	while(enemy.health>0 && playerInfo.health > 0) {
-		exchange += 1
-		if(exchange>1) {exc=' the rest of'} else {exc=''}
-		var promptFight = window.prompt('Type "Skip" if you want to pay $'+skipFee+' to skip'+exc+' this round');
 
-		if(promptFight===null) {promptFight='a';}		
-		if (promptFight.toLowerCase() === 'skip') {
-			//confirm skip
-			var confirmSkip = window.confirm('You sure you want to skip this round?');
-			//if confirmed to leave
-			if(confirmSkip) {
-				window.alert(playerInfo.name+' has "Chickened Out" of round '+round);
-				playerInfo.money = Math.max(0, playerInfo.money - skipFee);
-				console.log('Chicken Coins: '+playerInfo.money);
-				break;
-			}
+		if(fightOrSkip()) {
+			break;
 		}
+
 		//player attack action 
 		var damage = randomNumber(playerInfo.attack - 3,playerInfo.attack);
 		enemy.health = Math.max(0, enemy.health - damage);
