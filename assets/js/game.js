@@ -26,7 +26,6 @@ var fight = function(enemyName,round) {
 				break;
 			}
 		}
-
 		//player attack action 
 		enemyHealth = enemyHealth - chickenAttack;
 		//log result
@@ -69,6 +68,12 @@ var startGame = function () {
 			enemyHealth = 50;
 			// debugger;
 			fight(pickedEnemyName,round);
+			if (chickenHealth > 0 && i < enemyNameList.length -1) {
+				var storeConfirm = window.confirm('You got through that round. Would you like to visit the store?');
+				if(storeConfirm) {
+					shop();
+				}
+			}
 		} 
 		else {
 			window.alert('Health has reached zero. Your chicken has flown the coop. Game over');
@@ -94,7 +99,42 @@ var endGame = function() {
 		window.alert('Thank you for playing Chicken Fight Club. Enjoy some chicken fingers');
 	}
 
-}
+};
+
+var shop = function() {
+	var shopOptionPrompt = window.prompt('Would you like to REFILL health ($7), UPGRADE attack ($7), or LEAVE? Your balance: $'+chickenMoney);
+	if (shopOptionPrompt===null) {shopOptionPrompt='a';}
+	response=shopOptionPrompt.toLowerCase();
+	switch(response) {
+		case 'refill':
+			if(chickenMoney>=7) {
+				window.alert('Premium chicken feed purchased: Health increased 20');
+				chickenHealth += 20;
+				chickenMoney -= 7;
+			}
+			else {
+				window.alert('You are low on funds. Transaction DENIED');
+			}
+			break;
+		case 'upgrade':
+			if(chickenMoney>=7) {
+				window.alert('Your talons have been upgraded: Attack increased 6');
+				chickenAttack += 6;
+				chickenMoney -= 7;
+			}
+			else {
+				window.alert('You are low on funds. Transaction DENIED');
+			}
+			break;
+		case 'leave':
+			window.alert('Leaving the store.');
+			break;
+		default:
+			window.alert('Please pick a valid option');
+			shop();
+			break;
+	}
+};
 
 startGame();
 
