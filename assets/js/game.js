@@ -1,18 +1,68 @@
 window.alert('Welcome to Chicken Fight Club');	
-var chickenName = window.prompt('Please state your chicken\'s given name:');
-// var chickenName = 'Fred'
-var chickenHealth = 100;
-var chickenAttack = 10;
-var chickenMoney = 10;
 
-var enemyNameList = ['Fog Horn Leg Horn','Chicken Little','Colonel Sanders']
-var enemyHealth = '50';
-var enemyAttack = '12';
-var skipFee = 11;
+var healthCost = 7;
+var healthAdded = 20;
+var attackCost = 7;
+var attackAdded = 6;
+var skipFee = 2;
 
-var fight = function(enemyName,round) {
+var randomNumber = function(min,max) {
+	var value = Math.floor(Math.random()*(max-min+1)+min);
+	return value;
+};
+
+var playerInfo = {
+	name: window.prompt('Please state your chicken\'s given name:'),
+	health: 100,
+	attack: 10,
+	money: 10,
+	reset: function() {
+		this.health = 100;
+		this.money = 10;
+		this.attack = 10;
+	},
+	refillHealth: function() {
+		if(this.money >= healthCost) {	
+			window.alert('Premium chicken feed purchased: Health increased 20');	
+			this.health += healthAdded;
+			this.money -= healthCost;
+		}
+		else {
+		window.alert('You are low on funds. Transaction DENIED');			
+		}
+	},
+	upgradeAttack: function() {
+		if(this.money>=attackCost) {
+			window.alert('Your talons have been upgraded: Attack increased 6');
+			this.attack += attackAdded;
+			this.money -= attackCost;
+		}
+		else {
+		window.alert('You are low on funds. Transaction DENIED');			
+		}
+	}
+};
+
+var enemyInfo = [
+	{
+		name: 'Fog Horn Leg Horn',
+		attack: randomNumber(10, 14)
+	},
+	{
+		name: 'Chicken Little',
+		attack: randomNumber(10, 14)
+	},
+	{
+		name: 'Colonel Sanders',
+		attack: randomNumber(10, 14)
+	}
+];
+
+
+
+var fight = function(enemy,round) {
 	var exchange = 0
-	while(enemyHealth>0 && chickenHealth > 0) {
+	while(enemy.health>0 && playerInfo.health > 0) {
 		exchange += 1
 		if(exchange>1) {exc=' the rest of'} else {exc=''}
 		var promptFight = window.prompt('Type "Skip" if you want to pay $'+skipFee+' to skip'+exc+' this round');
@@ -20,62 +70,62 @@ var fight = function(enemyName,round) {
 		if(promptFight===null) {promptFight='a';}		
 		if (promptFight.toLowerCase() === 'skip') {
 			//confirm skip
-			var confirmSkip = window.confirm('You sure you want to quit this round?');
+			var confirmSkip = window.confirm('You sure you want to skip this round?');
 			//if confirmed to leave
 			if(confirmSkip) {
-				window.alert(chickenName+' has "Chickened Out" of round '+round);
-				chickenMoney = Math.max(0, chickenMoney - skipFee);
-				console.log('Chicken Coins: '+chickenMoney);
+				window.alert(playerInfo.name+' has "Chickened Out" of round '+round);
+				playerInfo.money = Math.max(0, playerInfo.money - skipFee);
+				console.log('Chicken Coins: '+playerInfo.money);
 				break;
 			}
 		}
 		//player attack action 
-		var damage = randomNumber(chickenAttack - 3,chickenAttack);
-		enemyHealth = Math.max(0, enemyHealth - damage);
+		var damage = randomNumber(playerInfo.attack - 3,playerInfo.attack);
+		enemy.health = Math.max(0, enemy.health - damage);
 		console.log('You delivered '+damage+' damage')
 		//log result
-		console.log(chickenName+' attacked '+ enemyName+'. '+enemyName+' now has '+ enemyHealth+' health remaining');
+		console.log(playerInfo.name+' attacked '+ enemy.name+'. '+enemy.name+' now has '+ enemy.health+' health remaining');
 
 		//enemy health check
-		if (enemyHealth<=0) {
-			window.alert(enemyName+' has flown to the big coop in the sky');
+		if (enemy.health<=0) {
+			window.alert(enemy.name+' has flown to the big coop in the sky');
 			//spoils
-			chickenMoney = chickenMoney + 20;
+			playerInfo.money = playerInfo.money + 20;
 			break;
 		} else {
-			window.alert('Your opponent '+enemyName+' has '+enemyHealth+' health remaining');
+			window.alert('Your opponent '+enemy.name+' has '+enemy.health+' health remaining');
 		}
 
 		//opponent attack action
-		var damage = randomNumber(enemyAttack-3,enemyAttack);
-		chickenHealth = Math.max(0, chickenHealth - damage);
+		console.log(playerInfo.health);
+		damage = randomNumber(enemy.attack - 3,enemy.attack);
+		console.log(damage)
+		playerInfo.health = Math.max(0, playerInfo.health - damage);
 		console.log('You took '+damage+' damage')
-		console.log(enemyName+' has attacked '+chickenName+'. '+chickenName+' now has '+chickenHealth+' health remaining');
+		console.log(enemy.name+' has attacked '+playerInfo.name+'. '+playerInfo.name+' now has '+playerInfo.health+' health remaining');
 
 		//player health check
-		if(chickenHealth <=0) {
-			window.alert('Your chicken '+chickenName+' has flown to the big coop in the sky');
+		if(playerInfo.health <=0) {
+			window.alert('Your chicken '+playerInfo.name+' has flown to the big coop in the sky');
 			break;
 		} else {
-			window.alert(chickenName+' has '+chickenHealth+' health remaining')
+			window.alert(playerInfo.name+' has '+playerInfo.health+' health remaining')
 		}	
 	}
 };
 
 var startGame = function () {
-	chickenHealth = 100;
-	chickenAttack = 10;
-	chickenMoney = 10;
-	for(var i = 0; i < enemyNameList.length; i++) {
+	playerInfo.reset();
+	for(var i = 0; i < enemyInfo.length; i++) {
 		var round = i+1
-		if (chickenHealth>0) {
+		if (playerInfo.health>0) {
 			window.alert('Get ready to fight. Round '+round);
-			var pickedEnemyName = enemyNameList[i];
-			enemyHealth = randomNumber(40,60);
-			console.log('enemy start health: '+enemyHealth)
+			var pickedEnemyObj = enemyInfo[i];
+			pickedEnemyObj.health = randomNumber(40,60);
+			console.log('enemy start health: '+pickedEnemyObj.health)
 			// debugger;
-			fight(pickedEnemyName,round);
-			if (chickenHealth > 0 && i < enemyNameList.length -1) {
+			fight(pickedEnemyObj,round);
+			if (playerInfo.health > 0 && i < enemyInfo.length -1) {
 				var storeConfirm = window.confirm('You got through that round. Would you like to visit the store?');
 				if(storeConfirm) {
 					shop();
@@ -92,8 +142,8 @@ var startGame = function () {
 
 var endGame = function() {
 	window.alert('The game is over. Let\'s see how you did.');
-	if(chickenHealth>0) {
-		window.alert('Great job. You survived the chicken fights. You have a score of '+chickenMoney);
+	if(playerInfo.health>0) {
+		window.alert('Great job. You survived the chicken fights. You have a score of '+playerInfo.money);
 	}
 	else {
 		window.alert('Sorry. But your chicken did not make it out alive')
@@ -109,29 +159,15 @@ var endGame = function() {
 };
 
 var shop = function() {
-	var shopOptionPrompt = window.prompt('Would you like to REFILL health ($7), UPGRADE attack ($7), or LEAVE? Your balance: $'+chickenMoney);
+	var shopOptionPrompt = window.prompt('Would you like to REFILL health ($7), UPGRADE attack ($7), or LEAVE? Your balance: $'+playerInfo.money);
 	if (shopOptionPrompt===null) {shopOptionPrompt='a';}
 	response=shopOptionPrompt.toLowerCase();
 	switch(response) {
 		case 'refill':
-			if(chickenMoney>=7) {
-				window.alert('Premium chicken feed purchased: Health increased 20');
-				chickenHealth += 20;
-				chickenMoney -= 7;
-			}
-			else {
-				window.alert('You are low on funds. Transaction DENIED');
-			}
+			playerInfo.refillHealth();
 			break;
 		case 'upgrade':
-			if(chickenMoney>=7) {
-				window.alert('Your talons have been upgraded: Attack increased 6');
-				chickenAttack += 6;
-				chickenMoney -= 7;
-			}
-			else {
-				window.alert('You are low on funds. Transaction DENIED');
-			}
+			playerInfo.upgradeAttack();
 			break;
 		case 'leave':
 			window.alert('Leaving the store.');
@@ -143,10 +179,6 @@ var shop = function() {
 	}
 };
 
-var randomNumber = function(min,max) {
-	var value = Math.floor(Math.random()*(max-min+1)+min);
-	return value;
-};
 
 startGame();
 
