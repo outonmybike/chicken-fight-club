@@ -30,7 +30,9 @@ var fight = function(enemyName,round) {
 			}
 		}
 		//player attack action 
-		enemyHealth = Math.max(0, enemyHealth - chickenAttack);
+		var damage = randomNumber(chickenAttack - 3,chickenAttack);
+		enemyHealth = Math.max(0, enemyHealth - damage);
+		console.log('You delivered '+damage+' damage')
 		//log result
 		console.log(chickenName+' attacked '+ enemyName+'. '+enemyName+' now has '+ enemyHealth+' health remaining');
 
@@ -45,7 +47,9 @@ var fight = function(enemyName,round) {
 		}
 
 		//opponent attack action
-		chickenHealth = Math.max(0, chickenHealth - enemyAttack);
+		var damage = randomNumber(enemyAttack-3,enemyAttack);
+		chickenHealth = Math.max(0, chickenHealth - damage);
+		console.log('You took '+damage+' damage')
 		console.log(enemyName+' has attacked '+chickenName+'. '+chickenName+' now has '+chickenHealth+' health remaining');
 
 		//player health check
@@ -68,6 +72,7 @@ var startGame = function () {
 			window.alert('Get ready to fight. Round '+round);
 			var pickedEnemyName = enemyNameList[i];
 			enemyHealth = randomNumber(40,60);
+			console.log('enemy start health: '+enemyHealth)
 			// debugger;
 			fight(pickedEnemyName,round);
 			if (chickenHealth > 0 && i < enemyNameList.length -1) {
